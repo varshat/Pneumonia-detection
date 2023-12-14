@@ -90,6 +90,9 @@ valid_gen = ts_gen.flow_from_dataframe( valid_df, x_col= 'filepaths', y_col= 'la
 test_gen = ts_gen.flow_from_dataframe( test_df, x_col= 'filepaths', y_col= 'labels', target_size= img_size, class_mode= 'categorical',
                                     color_mode= 'rgb', shuffle= False, batch_size= batch_size)
 
+g_dict = train_gen.class_indices      # defines dictionary {'class': index}
+classes = list(g_dict.keys())       # defines list of dictionary's kays (classes), classes names : string
+images, labels = next(train_gen) 
 
 # model creation 
 
@@ -115,7 +118,7 @@ model.summary()
 
 #training of model
 batch_size = 20   # set batch size for training
-epochs =  20  # number of all epochs in training
+epochs =  10  # number of all epochs in training
 
 history = model.fit(x= train_gen, epochs= epochs, verbose= 1, validation_data= valid_gen, validation_steps= None, shuffle= False)
 
@@ -149,7 +152,7 @@ model.save('model.h5')
 
 
 # Prediction on loaded model
-loaded_model = tf.keras.models.load_model('D:\\Data Science\\Deep Learning Projects\\Video Classification\\notebook\\model.h5', compile=False)
+loaded_model = tf.keras.models.load_model('D:\\Data Science\\Deep Learning Projects\\Pneumonia-detection\\model.h5', compile=False)
 loaded_model.compile(Adamax(learning_rate= 0.001), loss= 'categorical_crossentropy', metrics= ['accuracy'])
 
 image_path = 'C:\\Users\\varsh\\Downloads\\xray.jpeg'
